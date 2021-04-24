@@ -28,6 +28,9 @@ public class CameraTriggerArea : CollidableBase
         
         if(collider is BoxCollider2D boxCollider2D)
             boxCollider2D.size = Vector2.one * VirtualCamera.m_Lens.OrthographicSize * 2f;
+        
+        HandController.OnLevelCompleted += DisableCollider;
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -36,6 +39,11 @@ public class CameraTriggerArea : CollidableBase
             return;
         
         PrioritizeNewCamera?.Invoke(VirtualCamera);
+    }
+
+    private void OnDisable()
+    {
+        HandController.OnLevelCompleted -= DisableCollider;
     }
 
 #if UNITY_EDITOR
@@ -57,6 +65,13 @@ public class CameraTriggerArea : CollidableBase
 
 #endif
 
+
+    //====================================================================================================================//
+
+    private void DisableCollider()
+    {
+        collider.enabled = false;
+    }
 
     //====================================================================================================================//
     
