@@ -145,13 +145,9 @@ public class HandController : CollidableBase
         in float rotationSpeed)
     {
         _camera = camera;
-        if (GameSettings.MoveType == MOVE_TYPE.AUTO_MOVE)
-        {
-            var cineMachineBrain = _camera.GetComponent<CinemachineBrain>();
-            cineMachineBrain.m_CameraActivatedEvent.AddListener(OnCameraCut);
-            _cameraBlendTime = cineMachineBrain.m_DefaultBlend.m_Time;
-        }
-        
+        var cineMachineBrain = _camera.GetComponent<CinemachineBrain>();
+        cineMachineBrain.m_CameraActivatedEvent.AddListener(OnCameraCut);
+        _cameraBlendTime = cineMachineBrain.m_DefaultBlend.m_Time;
 
         LineRenderer.positionCount = 0;
         _positions = new List<Vector3>();
@@ -202,6 +198,9 @@ public class HandController : CollidableBase
             _pauseRoutine = null;
         }
 
+        if (GameSettings.MoveType == MOVE_TYPE.CLICK)
+            return;
+        
         _pauseRoutine = StartCoroutine(PauseMovementCoroutine(_cameraBlendTime, 
             () =>
             {

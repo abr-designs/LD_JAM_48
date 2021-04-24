@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,8 +7,19 @@ public class PhysicsObjectSpawner : MonoBehaviour
     private GameObject[] prefabs;
 
     [SerializeField]
+    private float spawnRadius = 1f;
+
+    [SerializeField]
     private Vector2 spawnDelayRange;
     private float _spawnDelayTimer;
+    
+    [SerializeField]
+    private Vector2 spawnScaleRange = Vector2.one;
+
+    [SerializeField, Space(10f)]
+    private bool destroyAfterTime;
+    [SerializeField]
+    private Vector2 destroyTimeRange = Vector2.zero;
 
     private Vector2 _spawnPosition;
 
@@ -43,15 +51,25 @@ public class PhysicsObjectSpawner : MonoBehaviour
     private void SpawnPrefab()
     {
         var prefabSelected = prefabs[Random.Range(0, prefabs.Length)];
-        var temp = Instantiate(prefabSelected, _spawnPosition, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+        var spawnPosition = _spawnPosition + (Random.insideUnitCircle * spawnRadius);
+        var temp = Instantiate(prefabSelected, spawnPosition, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+        temp.transform.localScale = Vector3.one * Random.Range(spawnScaleRange.x, spawnScaleRange.y); 
         temp.transform.SetParent(transform, true);
+
+        if (temp.GetComponent<Rigidbody2D>() is Rigidbody2D rigidbody2D && rigidbody2D != null) 
+            rigidbody2D.WakeUp();
+
+        if (!destroyAfterTime)
+            return;
+        
+        Destroy(temp, Random.Range(destroyTimeRange.x, destroyTimeRange.y));
     }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, 1f);
+        Gizmos.DrawWireSphere(transform.position, spawnRadius);
     }
 #endif
 }
