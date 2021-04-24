@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Collect
+  - Wall
+  - Obstacle
+  - Interactable
   layers:
   - Default
   - TransparentFX
@@ -12,8 +15,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Interactables
+  - Obstacles
   - 
   - 
   - 

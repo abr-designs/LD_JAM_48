@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Obsolete]
 public class MouseHover : MonoBehaviour
 {
     [SerializeField]
@@ -23,8 +24,8 @@ public class MouseHover : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        if (handController.currentMoveType != HandController.MOVE_TYPE.MOUSE)
-            Destroy(gameObject);
+        //if (handController.currentMoveType != HandController.MOVE_TYPE.MOUSE)
+        Destroy(gameObject);
         
         growTarget.localScale = Vector3.zero;
 

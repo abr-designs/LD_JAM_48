@@ -3,42 +3,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Interactables;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using Interactables;
+
 
 public class HandController : MonoBehaviour
 {
     public enum MOVE_TYPE
     {
-        MOUSE,
         CLICK,
         AUTO_MOVE
     }
 
-    //[SerializeField]
+    //Properties
+    //====================================================================================================================//
+    
     public MOVE_TYPE currentMoveType = MOVE_TYPE.CLICK;
     
     [SerializeField]
     private float newNodeDistance;
 
+    private float Speed => moveSpeed;
+    
     [SerializeField]
     private float moveSpeed;
+
     [SerializeField]
     private float rotationSpeed;
 
-    private Vector2 _currentPos, _previousPos;
-
+    private Vector2 _currentPos;
     private Vector2 _lastNode;
     private List<Vector3> _positions;
-    private LineRenderer _lineRenderer;
-
-    private Camera _camera;
-    private new Transform transform;
-
+    
     public bool follow;
 
+
+    private Camera _camera;
+    private LineRenderer _lineRenderer;
+    private new Transform transform;
+
+
+    //Unity Functions
     //====================================================================================================================//
-    
+
+    #region Unity Functions
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -53,11 +64,6 @@ public class HandController : MonoBehaviour
 
         switch (currentMoveType)
         {
-            case MOVE_TYPE.MOUSE:
-                /*var mousePoint = _camera.ScreenToWorldPoint(Input.mousePosition);
-                transform.position = _lastNode = _currentPos = mousePoint;
-                CreateNewPathNode(mousePoint);
-                break;*/
             case MOVE_TYPE.CLICK:
                 _lastNode = _currentPos = transform.position ;
                 CreateNewPathNode(_currentPos);
@@ -78,16 +84,21 @@ public class HandController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log(other.gameObject.name, other.gameObject);
-
-        if (other.gameObject.CompareTag("Collect"))
+        switch (other.gameObject.tag)
         {
-            follow = false;
-            Destroy(other.gameObject);
-            StartCoroutine(PlayInReverseCoroutine());
+            case "Collect":
+                follow = false;
+                Destroy(other.gameObject);
+                StartCoroutine(PlayInReverseCoroutine());
+                break;
+            case "Obstacle":
+            case "Wall":
+                StartCoroutine(ReverseNodesCoroutine(7));
+                break;
+            case "Interactable":
+                other.gameObject.GetComponent<IInteractable>().Interact();
+                break;
         }
-        else
-            StartCoroutine(ReverseNodesCoroutine(7));
     }
 
     // Update is called once per frame
@@ -95,18 +106,6 @@ public class HandController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
             SceneManager.LoadScene(0);
-
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            currentMoveType = MOVE_TYPE.CLICK;
-            SceneManager.LoadScene(0);
-        } 
-        
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            currentMoveType = MOVE_TYPE.AUTO_MOVE;
-            SceneManager.LoadScene(0);
-        } 
         
         if(Input.GetKey(KeyCode.Escape))
             Application.Quit();
@@ -116,9 +115,6 @@ public class HandController : MonoBehaviour
         
         switch (currentMoveType)
         {
-            case MOVE_TYPE.MOUSE:
-                MouseMove();
-                break;
             case MOVE_TYPE.CLICK:
                 ClickMove();
                 break;
@@ -130,8 +126,13 @@ public class HandController : MonoBehaviour
         }
     }
 
+    #endregion //Unity Functions
+
+    //Movement
     //====================================================================================================================//
-    
+
+    #region Movement
+
     private void AutoMove()
     {
         if (Input.GetKey(KeyCode.A))
@@ -152,7 +153,7 @@ public class HandController : MonoBehaviour
             CreateNewPathNode(currentPosition);
         }
 
-        transform.position = Vector2.MoveTowards(currentPosition, currentPosition + transform.up, moveSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(currentPosition, currentPosition + transform.up, Speed * Time.deltaTime);
     }
     
     private void ClickMove()
@@ -173,44 +174,7 @@ public class HandController : MonoBehaviour
             CreateNewPathNode(currentPosition);
         }
 
-        transform.position = Vector2.MoveTowards(currentPosition, mousePos, moveSpeed * Time.deltaTime);
-    }
-
-    private void MouseMove()
-    {
-        Vector2 AverageDirection()
-        {
-            const int COUNT = 3;
-            var index = Mathf.Clamp(_positions.Count - (COUNT + 1), 0, _positions.Count);
-            var count = Mathf.Min(COUNT, _positions.Count);
-            
-            var pos = _positions.GetRange(index, count);
-
-            //var dirs = new Vector2[3];
-            var dir = Vector2.zero;
-            for (int i = 1; i < count; i++)
-            {
-                dir += (Vector2)(pos[i] - pos[i - 1]).normalized;
-            }
-
-            dir += (_currentPos - _lastNode).normalized;
-
-            return dir / count;
-        }
-
-        //--------------------------------------------------------------------------------------------------------//
-
-        //TODO Should go by distance, not by time i think
-        _currentPos = _camera.ScreenToWorldPoint(Input.mousePosition);
-        
-        if (Vector2.Distance(_currentPos, _lastNode) >= newNodeDistance)
-        {
-            _lastNode = _currentPos;
-            CreateNewPathNode(_currentPos);
-        }
-
-        transform.position = _currentPos;
-        transform.up = AverageDirection();
+        transform.position = Vector2.MoveTowards(currentPosition, mousePos, Speed * Time.deltaTime);
     }
 
     private void CreateNewPathNode(in Vector2 pos)
@@ -219,8 +183,13 @@ public class HandController : MonoBehaviour
         _lineRenderer.positionCount = _positions.Count;
         _lineRenderer.SetPositions(_positions.ToArray());
     }
+
+    #endregion //Movement
     
+    //Coroutines
     //====================================================================================================================//
+
+    #region Coroutines
 
     private IEnumerator ReverseNodesCoroutine(int count)
     {
@@ -260,7 +229,7 @@ public class HandController : MonoBehaviour
     private IEnumerator PlayInReverseCoroutine()
     {
         yield return new WaitForSeconds(1.5f);
-        var speed = moveSpeed * Time.deltaTime;
+        var speed = 0f;
         
         while (_positions.Count > 1)
         {
@@ -283,4 +252,8 @@ public class HandController : MonoBehaviour
         _lineRenderer.positionCount = 0;
     }
 
+    #endregion //Coroutines
+
+    //====================================================================================================================//
+    
 }
