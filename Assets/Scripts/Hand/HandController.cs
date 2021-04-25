@@ -98,7 +98,7 @@ public class HandController : CollidableBase
                 GrabObject(other.transform);
                 StartCoroutine(PlayInReverseCoroutine());
                 AudioController.PlaySound(AudioController.SFX.HAND);
-                AudioController.PlaySound(AudioController.SFX.PICKUP);
+                AudioController.PlaySound(AudioController.SFX.PICKUP, 0.7f);
 
                 CreateEffects(celebrationEffectPrefab, transform.position);
                 break;
@@ -389,7 +389,9 @@ public class HandController : CollidableBase
     private IEnumerator PlayInReverseCoroutine()
     {
         _pushingBack = true;
+        
         yield return new WaitForSeconds(1.5f);
+        
         var speed = 0f;
         
         while (_positions.Count > 1)
@@ -401,6 +403,8 @@ public class HandController : CollidableBase
             
             while (Vector2.Distance(endPos, transform.position) > 0.01f)
             {
+                var dist = Vector2.Distance(endPos, transform.position);
+                
                 transform.position = Vector2.MoveTowards(transform.position, endPos, Speed * Time.deltaTime * 3f);
                 
                 //FIXME If i have time, make this sexy

@@ -17,7 +17,7 @@ public class TriggerWaterSound : MonoBehaviour
         if (!other.CompareTag(searchTag))
             return;
         
-        AudioController.PlaySound(AudioController.SFX.WATER);
+        AudioController.PlaySound(AudioController.SFX.WATER, 0.7f);
         CreateEffects(waterEffectPrefab, other.transform.position);
     }
     
