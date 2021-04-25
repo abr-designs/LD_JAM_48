@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    public static Action<int> LevelCompleted;
     
     [SerializeField]
     private LevelController[] levelPrefabs;
@@ -19,11 +20,11 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        HandController.OnLevelCompleted += LoadNextLevel;
+        HandController.OnLevelCompleted += LoadMenu;
 
         transform = gameObject.transform;
 
-        LoadLevelAtIndex(_currentLevelIndex);
+        //LoadLevelAtIndex(_currentLevelIndex);
     }
     
     private void Update()
@@ -35,15 +36,23 @@ public class LevelManager : MonoBehaviour
 
     //====================================================================================================================//
 
-    private void LoadNextLevel()
+    /*private void LoadNextLevel()
     {
         if (_currentLevelIndex + 1 > levelPrefabs.Length)
             throw new NotImplementedException("Need to add end game functionality");
 
         LoadLevelAtIndex(_currentLevelIndex + 1);
+    }*/
+
+    private void LoadMenu()
+    {
+        if (_currentLevelController != null)
+            Destroy(_currentLevelController.gameObject);
+        
+        LevelCompleted?.Invoke(_currentLevelIndex);
     }
 
-    private void LoadLevelAtIndex(in int index)
+    public void LoadLevelAtIndex(in int index)
     {
         if (_currentLevelController != null)
             Destroy(_currentLevelController.gameObject);
