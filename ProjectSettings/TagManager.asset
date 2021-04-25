@@ -51,3 +51,6 @@ TagManager:
   - name: Hand
     uniqueID: 1526857545
     locked: 0
+  - name: Foreground
+    uniqueID: 1667357275
+    locked: 0
