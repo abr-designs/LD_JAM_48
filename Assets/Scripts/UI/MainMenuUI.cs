@@ -76,7 +76,10 @@ public class MainMenuUI : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
             cursor.sprite = closedHandSprite;
+            AudioController.PlaySound(AudioController.SFX.HAND);
+        }
         if (Input.GetKeyUp(KeyCode.Mouse0))
             cursor.sprite = openHandSprite;
         
@@ -106,6 +109,7 @@ public class MainMenuUI : MonoBehaviour
         //--------------------------------------------------------------------------------------------------------//
         
         volumeSlider.onValueChanged.AddListener(UpdateVolume);
+        volumeSlider.value = 0.65f;
 
         //--------------------------------------------------------------------------------------------------------//
         clickMovementButton.onClick.AddListener(() =>
@@ -142,7 +146,11 @@ public class MainMenuUI : MonoBehaviour
     
     private static void UpdateName(string playerName) => GameSettings.PlayerName = playerName;
 
-    private static void UpdateVolume(float volume) => GameSettings.Volume = volume;
+    private static void UpdateVolume(float volume)
+    {
+        GameSettings.Volume = volume;
+        AudioController.Volume(volume);
+    }
 
     private void UpdateMoveType(HandController.MOVE_TYPE moveType)
     {

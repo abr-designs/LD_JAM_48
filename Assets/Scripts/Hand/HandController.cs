@@ -93,9 +93,12 @@ public class HandController : CollidableBase
                 _finished = true;
                 GrabObject(other.transform);
                 StartCoroutine(PlayInReverseCoroutine());
+                AudioController.PlaySound(AudioController.SFX.HAND);
+                AudioController.PlaySound(AudioController.SFX.PICKUP);
                 break;
             case "Obstacle" when _pushingBack == false:
             case "Wall" when _pushingBack == false:
+                AudioController.PlaySound(AudioController.SFX.HIT_WALL);
                 StartCoroutine(ReverseNodesCoroutine(7));
                 break;
             case "Interactable":
@@ -107,12 +110,6 @@ public class HandController : CollidableBase
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(0);
-        
-        if(Input.GetKey(KeyCode.Escape))
-            Application.Quit();
-        
         if (!Follow)
             return;
         

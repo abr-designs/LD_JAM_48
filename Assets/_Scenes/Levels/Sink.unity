@@ -136,11 +136,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7265638579795493408, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7265638579795493408, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -12.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7265638579795493408, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
       propertyPath: m_LocalPosition.z
@@ -178,22 +178,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
-    - target: {fileID: 7265638579795493599, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
-      propertyPath: field of view
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 7265638579795493599, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
-      propertyPath: far clip plane
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 7265638579795493599, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
-      propertyPath: near clip plane
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7265638579795493599, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
-      propertyPath: orthographic size
-      value: 6.4
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5eff5f11534c6a04ca8d3e22d777e121, type: 3}
 --- !u!1001 &9186607295626675827
@@ -203,6 +187,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 904862820, guid: 73b829732650b09409c3637d48bc35f6, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7656259607431497632, guid: 73b829732650b09409c3637d48bc35f6, type: 3}
       propertyPath: m_Name
       value: SinkLevel

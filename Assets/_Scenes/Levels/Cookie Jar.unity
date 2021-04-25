@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &246715810
+--- !u!43 &38682355
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -422,6 +422,6 @@ PrefabInstance:
     - target: {fileID: 1711988871030891399, guid: 1da5ad002fb074f4cb85cacc298c48f7, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 246715810}
+      objectReference: {fileID: 38682355}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1da5ad002fb074f4cb85cacc298c48f7, type: 3}
