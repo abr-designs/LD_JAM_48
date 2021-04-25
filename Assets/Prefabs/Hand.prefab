@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 550dec19004c8bf46a167e3215b8c955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 4348324880182207075, guid: 80d349a3a1bec5143b44e9da139d6a92, type: 3}
+  celebrationEffectPrefab: {fileID: 5690217126436263614, guid: cf59874f655a6414287dca8e181c011d, type: 3}
   openHandSprite: {fileID: 140433255743585067, guid: cf4be57863508db4b96cadca2df33fcb, type: 3}
   closedHand: {fileID: 562137124616465177, guid: cf4be57863508db4b96cadca2df33fcb, type: 3}
   newNodeDistance: 0.35

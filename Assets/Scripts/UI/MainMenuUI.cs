@@ -46,6 +46,9 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField]
     private Button startButton;
     
+    [SerializeField]
+    private Button backButton;
+    
     private new RectTransform transform;
 
     [SerializeField, Header("Windows")] 
@@ -54,6 +57,8 @@ public class MainMenuUI : MonoBehaviour
     private GameObject menuObject;
     [SerializeField]
     private GameObject jobsObject;
+
+    private RectTransform _canvasRect;
 
     //====================================================================================================================//
 
@@ -67,9 +72,17 @@ public class MainMenuUI : MonoBehaviour
     {
         transform = gameObject.transform as RectTransform;
         
+        _canvasRect = GetComponentInParent<Canvas>().transform as RectTransform;
+        
+        
         SetupUI();
 
-        SetWindow(WINDOW.MAIN);
+        SetWindow(WINDOW.NONE);
+        
+        FadeUI.FadeScreen(() =>
+        {
+            SetWindow(WINDOW.MAIN);
+        }, null);
     }
 
     // Update is called once per frame
@@ -129,6 +142,11 @@ public class MainMenuUI : MonoBehaviour
         {
             SetWindow(WINDOW.JOBS);
         });
+        
+        backButton.onClick.AddListener(() =>
+        {
+            SetWindow(WINDOW.MAIN);
+        });
 
         //--------------------------------------------------------------------------------------------------------//
         
@@ -183,11 +201,19 @@ public class MainMenuUI : MonoBehaviour
                 jobsObject.SetActive(false);
                 break;
             case WINDOW.MAIN:
+                
+                StartCoroutine(FadeUI.GenericFadeCoroutine(_canvasRect, menuObject.transform as RectTransform,
+                    FadeUI.POSITION.TOP, FadeUI.POSITION.MIDDLE));
+                
                 canvasObject.SetActive(true);
                 menuObject.SetActive(true);
                 jobsObject.SetActive(false);
                 break;
             case WINDOW.JOBS:
+                
+                StartCoroutine(FadeUI.GenericFadeCoroutine(_canvasRect, jobsObject.transform as RectTransform,
+                    FadeUI.POSITION.TOP, FadeUI.POSITION.MIDDLE));
+                
                 canvasObject.SetActive(true);
                 menuObject.SetActive(false);
                 jobsObject.SetActive(true);

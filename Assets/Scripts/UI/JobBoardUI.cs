@@ -49,14 +49,24 @@ public class JobBoardUI : MonoBehaviour
 
     private void LoadLevel(int index)
     {
-        levelManager.LoadLevelAtIndex(index);
-        mainMenuUI.SetWindow(MainMenuUI.WINDOW.NONE);
+        FadeUI.FadeScreen(() =>
+        {
+            levelManager.LoadLevelAtIndex(index);
+            mainMenuUI.SetWindow(MainMenuUI.WINDOW.NONE);
+        }, ()=>
+        {
+            FindObjectOfType<HandController>().Follow = true;
+        }, "En Route!!!");
     }
 
     private void WrapUpJob(int index)
     {
-        mainMenuUI.SetWindow(MainMenuUI.WINDOW.JOBS);
-        _jobEntryUIElements[index].gameObject.SetActive(false);
+        FadeUI.FadeScreen(() =>
+        {
+            levelManager.CleanLevel();
+            mainMenuUI.SetWindow(MainMenuUI.WINDOW.JOBS);
+            _jobEntryUIElements[index].gameObject.SetActive(false);
+        },null,  "Job Finished!");
     }
 
     public void UpdateUserData()

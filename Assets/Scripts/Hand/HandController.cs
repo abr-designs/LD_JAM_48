@@ -8,6 +8,7 @@ using Interactables;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Interactables;
+using Unity.Mathematics;
 using UnityEngine.Experimental.Rendering.Universal;
 
 
@@ -28,6 +29,8 @@ public class HandController : CollidableBase
 
     private MOVE_TYPE _currentMoveType;
 
+    [SerializeField] private GameObject hitEffectPrefab, celebrationEffectPrefab;
+    
     [FormerlySerializedAs("openHand")] [SerializeField]
     private Sprite openHandSprite;
 
@@ -44,6 +47,7 @@ public class HandController : CollidableBase
 
     [SerializeField]
     private float rotationSpeed;
+    
 
     private Vector2 _currentPos;
     private Vector2 _lastNode;
@@ -95,11 +99,14 @@ public class HandController : CollidableBase
                 StartCoroutine(PlayInReverseCoroutine());
                 AudioController.PlaySound(AudioController.SFX.HAND);
                 AudioController.PlaySound(AudioController.SFX.PICKUP);
+
+                CreateEffects(celebrationEffectPrefab, transform.position);
                 break;
             case "Obstacle" when _pushingBack == false:
             case "Wall" when _pushingBack == false:
                 AudioController.PlaySound(AudioController.SFX.HIT_WALL);
                 StartCoroutine(ReverseNodesCoroutine(7));
+                CreateEffects(hitEffectPrefab, transform.position);
                 break;
             case "Interactable":
                 other.gameObject.GetComponent<IInteractable>().Interact();
@@ -185,7 +192,7 @@ public class HandController : CollidableBase
         }
 
         //TODO I'll need to have some sort of countdown
-        Follow = true;
+        //Follow = true;
     }
 
 
@@ -237,11 +244,11 @@ public class HandController : CollidableBase
 
     private void AutoMove()
     {
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             transform.up = Quaternion.Euler(0, 0, rotationSpeed * Time.deltaTime) *  transform.up;
         }
-        else if(Input.GetKey(KeyCode.D))
+        else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             transform.up = Quaternion.Euler(0, 0, -rotationSpeed * Time.deltaTime) *  transform.up;
         }
@@ -309,6 +316,15 @@ public class HandController : CollidableBase
     }
 
     #endregion //Movement
+
+    //Effects
+    //====================================================================================================================//
+
+    private static void CreateEffects(in GameObject prefab, in Vector2 position, in float killTime = 5f)
+    {
+        var effect = Instantiate(prefab, position, Quaternion.identity);
+        Destroy(effect, killTime);
+    }
     
     //Coroutines
     //====================================================================================================================//
@@ -402,6 +418,8 @@ public class HandController : CollidableBase
 
         _lineRenderer.positionCount = 0;
         _pushingBack = false;
+
+        yield return new WaitForSeconds(0.7f);
         
         OnLevelCompleted?.Invoke();
     }

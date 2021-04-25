@@ -2247,6 +2247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   searchTag: Player
+  waterEffectPrefab: {fileID: 9143507672533859170, guid: d3e4273337a974c428df254e74a170e9, type: 3}
 --- !u!1 &804402770
 GameObject:
   m_ObjectHideFlags: 0

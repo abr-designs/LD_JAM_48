@@ -46,16 +46,18 @@ public class LevelManager : MonoBehaviour
 
     private void LoadMenu()
     {
+        LevelCompleted?.Invoke(_currentLevelIndex);
+    }
+
+    public void CleanLevel()
+    {
         if (_currentLevelController != null)
             Destroy(_currentLevelController.gameObject);
-        
-        LevelCompleted?.Invoke(_currentLevelIndex);
     }
 
     public void LoadLevelAtIndex(in int index)
     {
-        if (_currentLevelController != null)
-            Destroy(_currentLevelController.gameObject);
+        CleanLevel();
 
         _currentLevelIndex = index;
         _currentLevelController = Instantiate(levelPrefabs[index],Vector3.zero, quaternion.identity);
