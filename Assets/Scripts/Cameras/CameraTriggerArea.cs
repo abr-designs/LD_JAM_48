@@ -29,7 +29,7 @@ public class CameraTriggerArea : CollidableBase
         if(collider is BoxCollider2D boxCollider2D)
             boxCollider2D.size = Vector2.one * VirtualCamera.m_Lens.OrthographicSize * 2f;
         
-        HandController.OnLevelCompleted += DisableCollider;
+        HandController.OnLevelWrapping += DisableCollider;
 
     }
 
@@ -43,7 +43,7 @@ public class CameraTriggerArea : CollidableBase
 
     private void OnDisable()
     {
-        HandController.OnLevelCompleted -= DisableCollider;
+        HandController.OnLevelWrapping -= DisableCollider;
     }
 
 #if UNITY_EDITOR

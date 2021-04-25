@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    public static Action OnLevelReset;
+    
     [SerializeField]
     private string name = "Level";
 
@@ -37,27 +39,13 @@ public class LevelController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        Reset();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.R))
-            Reset();
-        
-    }
-
-    //====================================================================================================================//
-
-    private void Reset()
-    {
         FindObjectOfType<HandController>().Setup(Camera,
             startOrientationTransform.position, 
             startOrientationTransform.up,
             handSpeed,
             rotationSpeed);
     }
-    
+
     //Unity Editor
     //====================================================================================================================//
     

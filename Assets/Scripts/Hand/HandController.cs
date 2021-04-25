@@ -13,7 +13,9 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class HandController : CollidableBase
 {
+    public static Action OnLevelWrapping;
     public static Action OnLevelCompleted;
+    
     public enum MOVE_TYPE
     {
         CLICK,
@@ -86,7 +88,7 @@ public class HandController : CollidableBase
         switch (other.gameObject.tag)
         {
             case "Collect":
-                OnLevelCompleted?.Invoke();
+                OnLevelWrapping?.Invoke();
                 Follow = false;
                 _finished = true;
                 GrabObject(other.transform);
@@ -131,6 +133,12 @@ public class HandController : CollidableBase
     {
         var cineMachineBrain = _camera.GetComponent<CinemachineBrain>();
         cineMachineBrain.m_CameraActivatedEvent.RemoveListener(OnCameraCut);
+    }
+
+    private void OnDestroy()
+    {
+        if(_collidersContainerTransform)
+            Destroy(_collidersContainerTransform.gameObject);
     }
 
     #endregion //Unity Functions
@@ -253,17 +261,26 @@ public class HandController : CollidableBase
         transform.position = Vector2.MoveTowards(currentPosition, currentPosition + transform.up, Speed * Time.deltaTime);
     }
 
-    public Vector2 MousePos;
     private void ClickMove()
     {
-        MousePos = Input.mousePosition / new Vector2(Screen.width, Screen.height);
         
-        //var viewport = _camera.ScreenToViewportPoint(MousePos);
-        var mousePos = (Vector2)_camera.ViewportToWorldPoint(MousePos);
+        //The Editor and the build versions have different screen space for some reason
+#if UNITY_EDITOR
         
-        Debug.DrawLine(transform.position, mousePos, Color.green);
+        var MousePos = Input.mousePosition / new Vector2(Screen.width, Screen.height);
+        var worldPoint = (Vector2)_camera.ViewportToWorldPoint(MousePos);
         
-        transform.up = (mousePos - _lastNode).normalized;
+#else
+
+        var MousePos = Input.mousePosition;
+        var worldPoint = (Vector2)_camera.ScreenToWorldPoint(MousePos);
+
+#endif
+
+        
+        Debug.DrawLine(transform.position, worldPoint, Color.green);
+        
+        transform.up = (worldPoint - _lastNode).normalized;
         
         if (!Input.GetKey(KeyCode.Mouse0))
             return;
@@ -278,7 +295,7 @@ public class HandController : CollidableBase
             CreateNewPathNode(currentPosition);
         }
 
-        transform.position = Vector2.MoveTowards(currentPosition, mousePos, Speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(currentPosition, worldPoint, Speed * Time.deltaTime);
     }
 
     private void CreateNewPathNode(in Vector2 pos)
@@ -374,7 +391,8 @@ public class HandController : CollidableBase
                 transform.position = Vector2.MoveTowards(transform.position, endPos, Speed * Time.deltaTime * 3f);
                 
                 //FIXME If i have time, make this sexy
-                _lastCamera.position = new Vector3(transform.position.x,transform.position.y, -5 );
+                if(_lastCamera)
+                    _lastCamera.position = new Vector3(transform.position.x,transform.position.y, -5 );
                 
                 yield return null;
             }
@@ -387,6 +405,8 @@ public class HandController : CollidableBase
 
         _lineRenderer.positionCount = 0;
         _pushingBack = false;
+        
+        OnLevelCompleted?.Invoke();
     }
 
     #endregion //Coroutines
