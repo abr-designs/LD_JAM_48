@@ -426,6 +426,16 @@ public class HandController : CollidableBase
 
     #endregion //Coroutines
 
+#if UNITY_EDITOR
+
+    [ContextMenu("Start Follow")]
+    private void TriggerFollow()
+    {
+        Follow = true;
+    }
+    
+#endif
+
     //====================================================================================================================//
 
     protected override void SetColor(in Color color)
