@@ -9927,6 +9927,11 @@ PrefabInstance:
       value: I Got Gum in My Instrument
       objectReference: {fileID: 0}
     - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
+      propertyPath: response
+      value: The band must play on, and they will thanks to #NAME! The world will
+        know the beauty of my Tooba!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
       propertyPath: description
       value: I blew my gum straight into my Tooba! Now it doesn't work, I need an
         expert!!

@@ -9,6 +9,11 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private LevelController[] levelPrefabs;
 
+    [SerializeField] private string finalTitle;
+    
+    [SerializeField, TextArea]
+    private string finalBody;
+
     private LevelController _currentLevelController;
     private int _currentLevelIndex;
 
@@ -47,6 +52,21 @@ public class LevelManager : MonoBehaviour
     private void LoadMenu()
     {
         LevelCompleted?.Invoke(_currentLevelIndex);
+
+        GameSettings.LevelsCompleted++;
+
+        if (GameSettings.LevelsCompleted >= levelPrefabs.Length)
+        {
+            var response = finalBody.Replace("#NAME", GameSettings.PlayerName);
+            AlertUI.ShowAlert(finalTitle, response);
+        }
+        else
+        {
+            var levelData = levelPrefabs[_currentLevelIndex];
+            var response = levelData.response.Replace("#NAME", GameSettings.PlayerName);
+            AlertUI.ShowAlert(levelData.name, response);
+        }
+        
     }
 
     public void CleanLevel()

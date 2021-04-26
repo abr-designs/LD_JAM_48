@@ -12,6 +12,9 @@ public class LevelController : MonoBehaviour
     
     [SerializeField, TextArea]
     public string description = "Description";
+    
+    [SerializeField, TextArea]
+    public string response = "Response";
 
     [SerializeField]
     private float cameraSize = 5f;

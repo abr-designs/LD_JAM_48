@@ -4282,6 +4282,11 @@ PrefabInstance:
       value: I CANT REACH ME COOKIE
       objectReference: {fileID: 0}
     - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
+      propertyPath: response
+      value: DeAr #NAME, my MoM sais I cant hav any mor cookies, but the other ons
+        are oatmeal. Thx!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
       propertyPath: description
       value: 'DeAr Stranjer, BIlly must hav His cookie for hes helth.
 

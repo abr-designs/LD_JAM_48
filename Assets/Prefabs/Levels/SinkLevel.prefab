@@ -3386,6 +3386,11 @@ PrefabInstance:
       value: Nessy Stole MY RING
       objectReference: {fileID: 0}
     - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
+      propertyPath: response
+      value: TAKE THAT NESSY, I can't wait to show my best friend Smeagol! Thanks
+        #NAME
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
       propertyPath: description
       value: My Ring-pop was stolen, and I DEMAND IT BACK! I DO NOT negotiate with
         lake monsters. Exposure should be payment enough.

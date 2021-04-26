@@ -8910,6 +8910,11 @@ PrefabInstance:
       value: My Dog Ate my Lucky Dime!
       objectReference: {fileID: 0}
     - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
+      propertyPath: response
+      value: Wow #NAME, my dime, my life has meaning again, my dog and I are both
+        so relieved!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1530411496082223551, guid: 831c713bd2274dd449ef9c5ae82a4a08, type: 3}
       propertyPath: description
       value: Please can anyone help me!? Its my favorite dime I found today!
       objectReference: {fileID: 0}
